@@ -19,43 +19,65 @@ db.connect((err) => {
     console.log('Connected to MySQL database');
 });
 
-app.get('/',(req,res)=>{
-    res.send("home")
-})
+// app.get('/',(req,res)=>{
+//     res.send("home")
+// })
 
 
-app.get('/listSchools',(req,res)=>{
-    const query = "select * from schools"
-    db.query(query,(err,data)=>{
-        if (err) {
-            return res.json('Error')
-        }
-        else{
-            return res.json(data)
-        }
-    });
-})
+// app.get('/listSchools',(req,res)=>{
+//     const query = "select * from schools"
+//     db.query(query,(err,data)=>{
+//         if (err) {
+//             return res.json('Error')
+//         }
+//         else{
+//             return res.json(data)
+//         }
+//     });
+// })
 
-app.get("/listSchools:id",(req,res)=>{
-    const id = Number(req.params.id);
-     const query = "select * from schools"
-    db.query(query,(err,data)=>{
-        if (err) {
-            return res.json('Error')
-        }
-        else{
-            const schoolId = data.find((itemId)=>itemId.id===id) 
-            return res.json(schoolId)
-        }
-    })
+// app.get("/listSchools:id",(req,res)=>{
+//     const id = Number(req.params.id);
+//      const query = "select * from schools"
+//     db.query(query,(err,data)=>{
+//         if (err) {
+//             return res.json('Error')
+//         }
+//         else{
+//             const schoolId = data.find((itemId)=>itemId.id===id) 
+//             return res.json(schoolId)
+//         }
+//     })
 
-})
-// app.use(express.urlencoded({extended:false}))
+// })
+
+// middleware for taking row data input
+
+
+app.use(express.json());
+
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// post request adding school data
 
 app.post('/addSchool',(req,res)=>{
     const body = req.body;
     console.log(body)
     const {name,address,latitude,longitude} = req.body;
+
+
+    if (!name || typeof name !== 'string' || name.trim() === ''  ) {
+         return res.status(400).json({status:"error",message:"Name is required and must be a valid string"});
+    }
+    if (!address || typeof address !== 'string' || address.trim()==='') {
+         return res.status(400).json({status:"error",message:"Address is required and must be a valid string"});
+        
+    }
+if (typeof latitude !== 'number' || typeof longitude !=='number'|| isNaN(latitude)||isNaN(longitude)||latitude<-90||latitude>90||longitude<-180||longitude>180) {
+    return res.status(400).json({status:"error",message:"latitude and longitude must be valid numbers within the correct range"});
+}
+
+
     const query = "insert into schools(name,address,latitude,longitude) values(?,?,?,?)"
     db.query(query,[name,address,latitude,longitude],(err,data)=>{
         if (err) {
@@ -70,8 +92,9 @@ return res.json({status:"success",data:req.body})
 })
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// get request for getting schools in sorted way as per distance
 
-app.get('/listSchools/distance', (req, res) => {
+app.get('/listSchools', (req, res) => {
     const { latitude, longitude } = req.query;
 
     if (!latitude || !longitude) {
