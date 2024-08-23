@@ -19,37 +19,20 @@ db.connect((err) => {
     console.log('Connected to MySQL database');
 });
 
-// app.get('/',(req,res)=>{
-//     res.send("home")
-// })
+app.get('/',(req,res)=>{
+   const query = "select * from schools"
+    db.query(query,(err,data)=>{
+        if (err) {
+            return res.json('Error')
+        }
+        else{
+            return res.json(data)
+        }
+    });
+})
 
 
-// app.get('/listSchools',(req,res)=>{
-//     const query = "select * from schools"
-//     db.query(query,(err,data)=>{
-//         if (err) {
-//             return res.json('Error')
-//         }
-//         else{
-//             return res.json(data)
-//         }
-//     });
-// })
 
-// app.get("/listSchools:id",(req,res)=>{
-//     const id = Number(req.params.id);
-//      const query = "select * from schools"
-//     db.query(query,(err,data)=>{
-//         if (err) {
-//             return res.json('Error')
-//         }
-//         else{
-//             const schoolId = data.find((itemId)=>itemId.id===id) 
-//             return res.json(schoolId)
-//         }
-//     })
-
-// })
 
 // middleware for taking row data input
 
