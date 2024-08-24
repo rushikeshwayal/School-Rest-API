@@ -2,7 +2,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
-app.use(cors());
+
 
 const app = express();
 const PORT = 5000;
@@ -41,7 +41,7 @@ app.get('/',(req,res)=>{
 
 
 app.use(express.json());
-
+app.use(cors());
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // post request adding school data
