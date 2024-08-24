@@ -5,10 +5,10 @@ const app = express();
 const PORT = 5000;
 
 const db = mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"Rushikeshwayal@007",
-    database:"school"
+    host:"bdvvc53b5u5wupgl15hk-mysql.services.clever-cloud.com",
+    user:"ul7f79szxbt7ywia",
+    password:"mBjmuP1xMkPvZxROsvf0",
+    database:"bdvvc53b5u5wupgl15hk"
 
 })
 db.connect((err) => {
