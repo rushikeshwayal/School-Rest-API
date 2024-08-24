@@ -1,6 +1,9 @@
 // import express from 'express';
 const express = require('express');
 const mysql = require('mysql');
+const cors = require('cors');
+app.use(cors());
+
 const app = express();
 const PORT = 5000;
 
